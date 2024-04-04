@@ -1,0 +1,145 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700&display=swap");
+
+/* index pages */
+
+h1 {
+  font-family: "Poppins", sans-serif;
+  color: #062a4d;
+  font-weight: 600;
+}
+
+p {
+  font-size: 16px;
+  line-height: 28px;
+  margin-bottom: 35px;
+  padding-right: 20px;
+  color: #6f7172;
+}
+
+.slogan-Section {
+  padding-top: 100px;
+  padding-bottom: 100px;
+}
+
+.contract-info-section .section-title p{
+    color: #1b70f0;
+    font-size: 16px;
+    text-transform: uppercase;
+    font-weight: 500;
+    letter-spacing: 3px;
+    font-family: "Rubik", sans-serif;
+}
+
+.contract-info-section .section-title p span{
+    background: #1b70f0;
+    height: 2px;
+    width: 30px;
+    display: inline-block;
+    margin-right: 12px;
+    position: relative;
+    top: -4px;
+}
+
+.contract-info-card i{
+    font-size: 60px;
+}
+
+.contract-info-card h4{
+    font-size: 20px;
+    letter-spacing: -.5px;
+    font-family: "Poppins", sans-serif;
+    color: #062a4d;
+    margin-top: 0px;
+    font-weight: 500;
+    margin-bottom: 20px;
+    line-height: 1.3;
+}
+
+.founder-section h2{
+    margin-bottom: 100px;
+    font-family: "Poppins", sans-serif;
+    color: #062a4d;
+    font-weight: 500;
+}
+
+.founder-section .founder-card-img {
+  height: 470px;
+  width: 350px;
+  margin-right: 50px;
+  margin-bottom: 50px;
+  position: relative;
+}
+
+.founder-section .founder-card-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center bottom;
+}
+
+.founder-card-content {
+  position: absolute;
+  bottom: 50px;
+  left: 35px;
+  right: 35px;
+  padding: 30px 20px;
+  box-shadow: 1.389px 7.878px 16px 0px rgba(97, 97, 97, 0.2);
+  transition: 0.3s;
+  background: #ffffff;
+}
+
+.founder-card-content::before {
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 12px 10px 0 10px;
+  border-color: #ffffff transparent transparent transparent;
+  position: absolute;
+  content: "";
+  bottom: -12px;
+  left: 0;
+  right: 0;
+  margin: auto;
+}
+
+.founder-card-content {
+  transition: transform 0.3s ease;
+}
+
+.founder-card-content:hover {
+  transform: translateY(-10px);
+}
+
+.founder-card-content h4 {
+  font-family: "Poppins", sans-serif;
+  color: #062a4d;
+  font-weight: 600;
+}
+
+.founder-card-content a {
+  text-decoration: none;
+  color: #062a4d;
+}
+
+.founder-card-content a:hover {
+  color: #1b70f0;
+  cursor: pointer;
+}
+
+.founder-card-content span {
+  font-family: "Rubik", sans-serif;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-size: 12px;
+  color: #60597a;
+}
+
+.founder-card-hidden-content {
+    display: none;
+}
+
+.founder-card-content:hover > .founder-card-hidden-content {
+    display: block;
+}
