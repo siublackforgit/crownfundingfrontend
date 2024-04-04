@@ -1,6 +1,6 @@
 import { React, useState, useEffect } from "react";
 import { ethers } from "ethers";
-import MyContractArtifact from "../../../backend/contracts/artifacts/MyContract.json";
+import MyContractArtifact from "../../../backend/artifacts/contracts/Contract.sol/MyContract.json";
 import Nav from "../Components/Nav";
 import index from "../assets/Pages/index.jpg";
 import Potrait from "../assets/Portrait/Portrait.jpeg";
@@ -9,13 +9,36 @@ import Wrexham from "../assets/Pages/wrexham.jpg";
 const Index = () => {
 
   const contractAddress = import.meta.env.VITE_CONTRACT_ADDRESS;
+  const endPoint = import.meta.env.VITE_LOCAL_BLOCKCHAIN_ENDPOINT;
   const [indexInfo, setIndexInfo] = useState({
     campaignNumberBacked : null,
     currentCampaignNumber : null,
     numberOfFundRaised : null
   })
 
-  
+  useEffect(()=>{
+
+    const provider = new ethers.providers.JsonRpcProvider(endPoint);
+    const myContract = new ethers.Contract(contractAddress,MyContractArtifact.abi,provider)
+    console.log('contract address',contractAddress);
+    console.log('endPoint',endPoint);
+    const getMyNumber = async () => {
+      try {
+        const number = await myContract.getAllCampaigns();
+        const activeCampaignNumber = await myContract.getActiveCampaignCount();
+        setIndexInfo(prevState => ({
+          ...prevState,
+          campaignNumberBacked: number.toString(),
+          currentCampaignNumber: activeCampaignNumber.toString(),
+        }));
+      } catch (error) {
+        console.log('error',error);
+      }
+    }
+
+    getMyNumber();
+
+  },[])
   return (
     <div className="App">
       <Nav />
@@ -29,6 +52,13 @@ const Index = () => {
                   <p>
                     By using the new technology of BlockChain, Backers and
                     creator nowaday nowaday can enjoy their largest freedom
+                  </p>
+                  <p className="d-flex align-items-center">
+                    <i class="fa-brands fa-ethereum eth"></i>
+                    <div className="eth-text">
+                    A decentralized platform  <br />
+                    powered by Ethereum
+                    </div>
                   </p>
                 </div>
               </div>
@@ -52,26 +82,28 @@ const Index = () => {
             <div className="row">
               <div className="col-12 col-md-3 ">
                 <div className="contract-info-card  text-center">
-                <i class="fa-solid fa-check"></i>
+                <i className="fa-solid fa-check"></i>
                 <h4>Number of Campaigns backed</h4>
+                <p>{indexInfo.campaignNumberBacked}</p>
                 </div>
               </div>
               <div className="col-12 col-md-3  ">
               <div className="contract-info-card text-center">
-              <i class="fa-solid fa-hourglass-start"></i>
-                <h4>Current Campaign</h4>
+              <i className="fa-solid fa-hourglass-start"></i>
+                <h4>Active Campaign</h4>
+                <p>{indexInfo.currentCampaignNumber}</p>
                 </div>
               </div>
               <div className="col-12 col-md-3 ">
               <div className="contract-info-card  text-center">
-              <i class="fa-solid fa-file-signature"></i>
+              <i className="fa-solid fa-file-signature"></i>
                 <h4>Contract Address</h4>
                 <p>{contractAddress}</p>
                 </div>
               </div>
               <div className="col-12 col-md-3  ">
               <div className="contract-info-card  text-center">
-              <i class="fa-solid fa-comments-dollar"></i>
+              <i className="fa-solid fa-comments-dollar"></i>
                 <h4>Number of Fund Raised</h4>
                 </div>
               </div>
