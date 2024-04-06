@@ -54,7 +54,7 @@ const Index = () => {
                     creator nowaday nowaday can enjoy their largest freedom
                   </p>
                   <p className="d-flex align-items-center">
-                    <i class="fa-brands fa-ethereum eth"></i>
+                    <i className="fa-brands fa-ethereum eth"></i>
                     <div className="eth-text">
                     A decentralized platform  <br />
                     powered by Ethereum

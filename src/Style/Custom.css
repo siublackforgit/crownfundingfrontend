@@ -1,5 +1,60 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700&display=swap');
+
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 40px rgba(0, 0, 0, 0.1);
+}
+
+.nav-container {
+  width: 85%;
+  margin: auto;
+}
+
+.navbar img {
+  height: 150px;
+}
+
+@media (min-width: 992px) {
+  .navbar-collapse{
+    justify-content: end;
+  }
+
+  .navbar-collapse ul {
+    margin-right: 20px;
+  }
+}
+
+.navbar-collapse ul li{
+  font-family: "Rubik", sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.connect-button {
+  font-weight: 500;
+  text-align: center;
+  border: 1px solid transparent;
+  line-height: 1;
+  border-radius: 0;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  background: #6100b3;
+  padding: 23px 40px;
+  text-transform: uppercase;
+  font-size: 12px;
+  color: #fff;
+  height: 60px;
+  letter-spacing: 2px;
+}
+
+.connect-button:hover {
+  background: #1b70f0;
+  color: #ffffff;
+}
 
 /* index pages */
 
@@ -22,63 +77,63 @@ p {
   padding-bottom: 100px;
 }
 
-.slogan-Section .eth{
-    font-size: 40px;
-    color: #6100b3;
-    margin-right: 10px;
+.slogan-Section .eth {
+  font-size: 40px;
+  color: #6100b3;
+  margin-right: 10px;
 }
 
-.slogan-Section .eth-text{
-    color: #6100b3;
-    font-size: 16px;
-    text-transform: uppercase;
-    font-weight: 400;
-    letter-spacing: 3px;
+.slogan-Section .eth-text {
+  color: #6100b3;
+  font-size: 16px;
+  text-transform: uppercase;
+  font-weight: 400;
+  letter-spacing: 3px;
 }
 
 .contract-info-section .section-title {
-    margin-bottom: 65px;
+  margin-bottom: 65px;
 }
 
-.contract-info-section .section-title p{
-    color: #1b70f0;
-    font-size: 16px;
-    text-transform: uppercase;
-    font-weight: 500;
-    letter-spacing: 3px;
-    font-family: "Rubik", sans-serif;
+.contract-info-section .section-title p {
+  color: #1b70f0;
+  font-size: 16px;
+  text-transform: uppercase;
+  font-weight: 500;
+  letter-spacing: 3px;
+  font-family: "Rubik", sans-serif;
 }
 
-.contract-info-section .section-title p span{
-    background: #1b70f0;
-    height: 2px;
-    width: 30px;
-    display: inline-block;
-    margin-right: 12px;
-    position: relative;
-    top: -4px;
+.contract-info-section .section-title p span {
+  background: #1b70f0;
+  height: 2px;
+  width: 30px;
+  display: inline-block;
+  margin-right: 12px;
+  position: relative;
+  top: -4px;
 }
 
-.contract-info-card i{
-    font-size: 60px;
+.contract-info-card i {
+  font-size: 60px;
 }
 
-.contract-info-card h4{
-    font-size: 20px;
-    letter-spacing: -.5px;
-    font-family: "Poppins", sans-serif;
-    color: #062a4d;
-    margin-top: 0px;
-    font-weight: 500;
-    margin-bottom: 20px;
-    line-height: 1.3;
+.contract-info-card h4 {
+  font-size: 20px;
+  letter-spacing: -0.5px;
+  font-family: "Poppins", sans-serif;
+  color: #062a4d;
+  margin-top: 0px;
+  font-weight: 500;
+  margin-bottom: 20px;
+  line-height: 1.3;
 }
 
-.founder-section h2{
-    margin-bottom: 100px;
-    font-family: "Poppins", sans-serif;
-    color: #062a4d;
-    font-weight: 500;
+.founder-section h2 {
+  margin-bottom: 100px;
+  font-family: "Poppins", sans-serif;
+  color: #062a4d;
+  font-weight: 500;
 }
 
 .founder-section .founder-card-img {
@@ -155,9 +210,21 @@ p {
 }
 
 .founder-card-hidden-content {
-    display: none;
+  display: none;
 }
 
 .founder-card-content:hover > .founder-card-hidden-content {
-    display: block;
+  display: block;
+}
+
+.contract-info-section i {
+  margin-bottom: 20px;
+}
+
+
+/* Campaign page */
+
+.hero-caption {
+  margin-top: 150px;
+  text-align: center;
 }
