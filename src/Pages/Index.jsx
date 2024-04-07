@@ -17,7 +17,6 @@ const Index = () => {
   })
 
   useEffect(()=>{
-
     const provider = new ethers.providers.JsonRpcProvider(endPoint);
     const myContract = new ethers.Contract(contractAddress,MyContractArtifact.abi,provider)
     console.log('contract address',contractAddress);
@@ -39,6 +38,7 @@ const Index = () => {
     getMyNumber();
 
   },[])
+  
   return (
     <div className="App">
       <Nav />
