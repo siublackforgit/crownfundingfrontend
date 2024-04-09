@@ -30,8 +30,8 @@ const Nav = () => {
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
       <div className="container-fluid nav-container">
-        <Link to="/" >
-        <img src={logo} alt="Logo" />
+        <Link to="/">
+          <img src={logo} alt="Logo" />
         </Link>
         <button
           className="navbar-toggler"
@@ -48,14 +48,14 @@ const Nav = () => {
           <div className="collapse navbar-collapse" id="navbarNav">
             <ul className="navbar-nav">
               <li className="nav-item">
-                <Link to="/campaign" className="nav-link">
-                Support a Campaign
+                <Link to="/supportcampaigns" className="nav-link">
+                  Support a Campaign
                 </Link>
               </li>
               <li className="nav-item">
-                  <Link to="/createcampaign" className="nav-link">
+                <Link to="/createcampaign" className="nav-link">
                   Create a Campaign
-                  </Link>
+                </Link>
               </li>
             </ul>
           </div>

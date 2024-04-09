@@ -286,3 +286,25 @@ p {
   letter-spacing: 2px;
 }
 
+.support-campaign-card{
+
+}
+
+.support-campaign-card h4{
+  text-align: center;
+}
+
+.causes__img{
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color:  #f5f5f5 ;
+}
+
+.causes__img img{
+  max-width: 100%;
+  max-height: 280px;
+  padding: 20px 0px;
+}
+
