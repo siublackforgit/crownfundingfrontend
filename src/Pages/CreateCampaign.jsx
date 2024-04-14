@@ -1,9 +1,10 @@
-import { React, useState, useEffect } from "react";
+import { React, useState, useEffect, useContext } from "react";
+import { AppContext } from "../Reducer/AppContext";
 import { ethers } from "ethers";
-import MyContractArtifact from "../../../backend/artifacts/contracts/Contract.sol/MyContract.json";
 import Nav from "../Components/Nav";
 
 const CreateCampaign = () => {
+  const { state } = useContext(AppContext);
   const [campaignForm, setCampaignForm] = useState({
     address: null,
     email: null,
@@ -25,20 +26,8 @@ const CreateCampaign = () => {
   const submitForm = async (e) => {
     e.preventDefault();
     console.log("form", campaignForm);
-    try {
-      const contractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
-      const signer = provider.getSigner();
-      const myContract = new ethers.Contract(
-        contractAddress,
-        MyContractArtifact.abi,
-        signer
-      );
-      console.log("contract address", contractAddress);
-      console.log("provider", provider);
-      console.log("signer", signer);
-
-      const transaction = await myContract.createCampaign(
+    try {    
+      const transaction = await state.contract.createCampaign(
         campaignForm.address,
         campaignForm.email,
         campaignForm.imgAddress,

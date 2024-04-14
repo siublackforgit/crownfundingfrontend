@@ -1,20 +1,37 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
+import { AppContext } from "../Reducer/AppContext";
 import { Link } from "react-router-dom";
 import { ethers } from "ethers";
+import MyContractArtifact from "../../../backend/artifacts/contracts/Contract.sol/MyContract.json";
 import "bootstrap/dist/css/bootstrap.min.css";
 import logo from "../assets/Logo/logo.svg";
 
 const Nav = () => {
-  const [userAddress, setUserAddress] = useState(null);
+  const { state, dispatch } = useContext(AppContext);
+  const contractAddress = import.meta.env.VITE_CONTRACT_ADDRESS;
+  const endPoint = import.meta.env.VITE_LOCAL_BLOCKCHAIN_ENDPOINT;
+  const [signer, setSigner] = useState(null);
+  const [contractInstance, setContractInstance] = useState(null);
+
   const connectWallet = async () => {
     if (window.ethereum) {
       try {
-        const accounts = await window.ethereum.request({
-          method: "eth_requestAccounts",
-        });
         const provider = new ethers.providers.Web3Provider(window.ethereum);
-        const signer = provider.getSigner();
-        setUserAddress(await signer.getAddress());
+        const accounts = await provider.send("eth_requestAccounts", []);
+        const account = ethers.utils.getAddress(accounts[0]);
+        const Signer = provider.getSigner();
+        if (Signer) {
+          setSigner(Signer);
+          dispatch({type:'GET_SIGNER',payload:signer})
+          const contractinstance = new ethers.Contract(contractAddress, MyContractArtifact.abi, signer);
+          if(contractinstance){
+            setContractInstance(contractinstance);
+            dispatch({type:'GET_CONTRACT',payload:contractInstance})
+            console.log('state',state)
+          }
+        } else {
+          console.error("No signer available");
+        }
       } catch (error) {
         if (error.code === 4001) {
           console.log("User rejected the connection request.");
@@ -24,9 +41,7 @@ const Nav = () => {
       }
     }
   };
-  useEffect(() => {
-    console.log("userWallet", userAddress);
-  });
+
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
       <div className="container-fluid nav-container">
@@ -44,7 +59,7 @@ const Nav = () => {
         >
           <span className="navbar-toggler-icon"></span>
         </button>
-        {userAddress && (
+        {state.signer && (
           <div className="collapse navbar-collapse" id="navbarNav">
             <ul className="navbar-nav">
               <li className="nav-item">
@@ -61,7 +76,7 @@ const Nav = () => {
           </div>
         )}
         <button className="connect-button" onClick={connectWallet}>
-          {userAddress ? `Connected` : "Connect to Wallet"}
+          {state.signer ? `Connected` : "Connect to Wallet"}
         </button>
       </div>
     </nav>
