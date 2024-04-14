@@ -13,25 +13,87 @@ const Nav = () => {
   const [signer, setSigner] = useState(null);
   const [contractInstance, setContractInstance] = useState(null);
 
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
+
+  useEffect(() => {
+    const setupSignerAndContract = async () => {
+      try {
+        const accounts = await provider.send("eth_requestAccounts", []);
+        const account = ethers.utils.getAddress(accounts[0]);
+        const Signer = provider.getSigner();
+
+        setSigner(Signer);
+        if ( Signer){
+          dispatch({ type: "GET_SIGNER", payload: Signer });
+        }
+
+        const contractinstance = new ethers.Contract(
+          contractAddress,
+          MyContractArtifact.abi,
+          signer
+        );
+
+        setContractInstance(contractinstance);
+        if(contractInstance){
+          dispatch({ type: "GET_CONTRACT", payload: contractInstance });
+        }
+        console.log("State after update:", state);
+      } catch (error) {
+        if (error.code === 4001) {
+          console.log("User rejected the connection request.");
+        } else {
+          console.error("An error occurred:", error);
+        }
+      }
+      console.log('state',state);
+    };
+
+    if (window.ethereum) {
+      window.ethereum.on("accountsChanged", async (accounts) => {
+        if (accounts.length === 0) {
+          console.log("Please connect to MetaMask");
+        } else {
+          await setupSignerAndContract();
+        }
+      });
+      setupSignerAndContract();
+    }
+
+    return () => {
+      if (window.ethereum) {
+        window.ethereum.removeListener(
+          "accountsChanged",
+          setupSignerAndContract
+        );
+      }
+    };
+  }, []);
+
   const connectWallet = async () => {
     if (window.ethereum) {
       try {
         const provider = new ethers.providers.Web3Provider(window.ethereum);
-        const accounts = await provider.send("eth_requestAccounts", []);
-        const account = ethers.utils.getAddress(accounts[0]);
-        const Signer = provider.getSigner();
-        if (Signer) {
-          setSigner(Signer);
-          dispatch({type:'GET_SIGNER',payload:signer})
-          const contractinstance = new ethers.Contract(contractAddress, MyContractArtifact.abi, signer);
-          if(contractinstance){
-            setContractInstance(contractinstance);
-            dispatch({type:'GET_CONTRACT',payload:contractInstance})
-            console.log('state',state)
+        const setupSignerAndContract = async (provider) => {
+          const accounts = await provider.send("eth_requestAccounts", []);
+          const account = ethers.utils.getAddress(accounts[0]);
+          const Signer = provider.getSigner();
+          if (Signer) {
+            setSigner(Signer);
+            dispatch({ type: "GET_SIGNER", payload: signer });
+            const contractinstance = new ethers.Contract(
+              contractAddress,
+              MyContractArtifact.abi,
+              signer
+            );
+            if (contractinstance) {
+              setContractInstance(contractinstance);
+              dispatch({ type: "GET_CONTRACT", payload: contractInstance });
+              console.log("state", state);
+            }
           }
-        } else {
-          console.error("No signer available");
-        }
+        };
+        await setupSignerAndContract(provider);
+
       } catch (error) {
         if (error.code === 4001) {
           console.log("User rejected the connection request.");
@@ -59,7 +121,7 @@ const Nav = () => {
         >
           <span className="navbar-toggler-icon"></span>
         </button>
-        {state.signer && (
+        {signer && (
           <div className="collapse navbar-collapse" id="navbarNav">
             <ul className="navbar-nav">
               <li className="nav-item">
@@ -76,7 +138,7 @@ const Nav = () => {
           </div>
         )}
         <button className="connect-button" onClick={connectWallet}>
-          {state.signer ? `Connected` : "Connect to Wallet"}
+          {signer ? `Connected` : "Connect to Wallet"}
         </button>
       </div>
     </nav>

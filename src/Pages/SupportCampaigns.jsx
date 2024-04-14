@@ -24,8 +24,13 @@ const SupportCampaigns = () => {
     const getActiveCampaignList = async () => {
       try {
         const campaigns  = await myContract.getActiveCampaignList();
-        console.log("activeCampaigns", campaigns);
-        setActiveCampaigns(campaigns);
+        const formattedCampaigns = campaigns.map(campaign => ({
+          ...campaign,
+          target: ethers.utils.formatEther(campaign.target._hex),
+          amountCollected: ethers.utils.formatEther(campaign.amountCollected._hex),
+          amountNotYetSend: ethers.utils.formatEther(campaign.amountNotYetSend._hex),
+        }));
+        setActiveCampaigns(formattedCampaigns);
         console.log('activeCampaign',activeCampaigns);
       } catch (error) {
         console.log("error", error);
@@ -54,7 +59,7 @@ const SupportCampaigns = () => {
             </div>
           </div>
           <div className="row">
-            {activeCampaigns && activeCampaigns.length &&
+            {activeCampaigns && activeCampaigns.length>0 &&
               activeCampaigns.map((item,index)=>(
                 <div 
                 className="col-xl-4 col-lg-4 col-md-6 support-campaign-card"
@@ -74,16 +79,16 @@ const SupportCampaigns = () => {
                   </div>
                   <div className="causes_info">
                     <p>
-                      {'CampaignId :'+parseInt(item.campaignId._hex)}
+                      {'Campaign ID :'+parseInt(item.campaignId._hex)}
                     </p>
                     <p>
-                      {'Target : '+parseInt(item.target._hex)}
+                      {'Target : '+parseInt(item.target)+' ethers'}
                     </p>
                     <p>
-                      {'Amount Collected : '+parseInt(item.amountCollected._hex)}
+                      {'Amount Collected : '+parseInt(item.amountCollected)+' ethers'}
                     </p>
                     <p>
-                      {'Amount not yet send : '+parseInt(item.amountNotYetSend._hex)}
+                      {'Amount not yet send : '+parseInt(item.amountNotYetSend)+' ethers'}
                     </p>
                   </div>
                 </div>

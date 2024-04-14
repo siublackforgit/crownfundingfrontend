@@ -27,6 +27,7 @@ const CreateCampaign = () => {
     e.preventDefault();
     console.log("form", campaignForm);
     try {    
+      console.log('state',state)
       const transaction = await state.contract.createCampaign(
         campaignForm.address,
         campaignForm.email,
