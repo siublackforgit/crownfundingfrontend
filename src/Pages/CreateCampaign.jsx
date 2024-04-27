@@ -3,8 +3,16 @@ import { AppContext } from "../Reducer/AppContext";
 import { ethers } from "ethers";
 import Nav from "../Components/Nav";
 
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+
 const CreateCampaign = () => {
   const { state } = useContext(AppContext);
+
+  const [selectDate, setSelectDate] = useState(new Date());
+  const today = new Date();
+
+
   const [campaignForm, setCampaignForm] = useState({
     address: null,
     email: null,
@@ -16,12 +24,27 @@ const CreateCampaign = () => {
     description: null,
   });
 
+  useEffect(() => {
+    if (selectDate) { 
+        const unixTimestamp = Math.floor(selectDate.getTime() / 1000);
+        console.log('Unix Timestamp:', unixTimestamp);
+        setCampaignForm((prev)=>({
+          ...prev,
+          deadLine: unixTimestamp,
+        }))
+    }
+}, [selectDate]); // Dependency array
+
   const handleForm = (e, keyWords) => {
     setCampaignForm((prev) => ({
       ...prev,
       [keyWords]: e.target.value,
     }));
   };
+
+  const handleDateForm = (date) => {
+    setSelectDate(date);
+  }
 
   const submitForm = async (e) => {
     e.preventDefault();
@@ -146,14 +169,18 @@ const CreateCampaign = () => {
               <div className="col-lg-6">
                 <div className="form-box user-icon mb-30">
                   <i className="fa-solid fa-calendar"></i>
-                  <input
+                  {/* <input
                     name="deadLine"
                     type="text"
                     placeholder="enter your deadline"
                     onChange={(e) => {
                       handleForm(e, e.target.name);
                     }}
-                  />
+                  /> */}
+                      <DatePicker 
+                      selected={selectDate} 
+                      minDate={today}
+                      onChange={handleDateForm} />
                 </div>
               </div>
               <div className="col-12">
@@ -166,7 +193,7 @@ const CreateCampaign = () => {
                     rows="10"
                     placeholder="Enter description for your Campaign"
                     onChange={(e) => {
-                      handleForm(e, e.target.name);
+                      (e, e.target.name);
                     }}
                   ></textarea>
                 </div>

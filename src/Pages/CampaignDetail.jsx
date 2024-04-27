@@ -1,7 +1,9 @@
 import { React, useEffect, useState, useContext } from "react";
+import { useParams } from "react-router-dom";
+
 import MyContractArtifact from "../../../backend/artifacts/contracts/Contract.sol/MyContract.json";
 import { ethers } from "ethers";
-import { useParams } from "react-router-dom";
+
 import Nav from "../Components/Nav";
 import { AppContext } from "../Reducer/AppContext";
 
