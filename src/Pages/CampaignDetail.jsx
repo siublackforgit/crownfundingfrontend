@@ -277,9 +277,9 @@ const CampaignDetail = () => {
               {backerDonation && parseFloat(backerDonation) > 0 ? (
                 <div>
                   <p>{`Your Current donation is ${backerDonation} ethers`}</p>
-                  <button onClick={releaseFund}>Release your Fund</button>{" "}
+                  <button className="btn" onClick={releaseFund}>Release your Fund</button>{" "}
                   <br />
-                  <button onClick={cancelFund}>Cancel your Fund</button>
+                  <button className="btn" onClick={cancelFund}>Cancel your Fund</button>
                 </div>
               ) : (
                 <div>

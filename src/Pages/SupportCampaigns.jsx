@@ -18,6 +18,18 @@ const SupportCampaigns = () => {
   const [campaigns, setCampaigns] = useState([]);
   const { campaignId } = useParams();
 
+  useEffect(()=>{
+
+    const provider = new ethers.providers.JsonRpcProvider(endPoint);
+
+    async function checkBlock(blockNumber) {
+      const block = await provider.getBlock(blockNumber);
+      console.log('Block:', block);
+    }
+    
+    checkBlock(contractAddress);
+  })
+
   useEffect(() => {
 
     const provider = new ethers.providers.JsonRpcProvider(endPoint);
@@ -144,8 +156,7 @@ const SupportCampaigns = () => {
                       </div>
                     </div>
                   </div>
-                ) : 
-                <div className="errorMessage">No Active Campaigns</div>
+                ) : null
               )}
           </div>
           <div className="row">
@@ -212,7 +223,7 @@ const SupportCampaigns = () => {
                       </div>
                     </div>
                   </div>
-                ) : <div className="errorMessage">{campaigns.length == 0 && "No Succeed Campaigns"}</div>
+                ) : null
               )
               }
           </div>
