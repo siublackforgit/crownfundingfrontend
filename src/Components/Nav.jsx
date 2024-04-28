@@ -11,63 +11,66 @@ const Nav = () => {
   const contractAddress = import.meta.env.VITE_CONTRACT_ADDRESS;
   const endPoint = import.meta.env.VITE_LOCAL_BLOCKCHAIN_ENDPOINT;
   const [signer, setSigner] = useState(null);
-  const [contractInstance, setContractInstance] = useState(null);
+  const [ContractInstance, setContractInstance] = useState(null);
 
   const provider = new ethers.providers.Web3Provider(window.ethereum);
 
   useEffect(() => {
-    const setupSignerAndContract = async () => {
-      try {
-        const accounts = await provider.send("eth_requestAccounts", []);
-        const account = ethers.utils.getAddress(accounts[0]);
-        const Signer = provider.getSigner();
-
-        setSigner(Signer);
-        if ( Signer){
-          dispatch({ type: "GET_SIGNER", payload: Signer });
+    if (state.contract == null) {
+      const setupSignerAndContract = async () => {
+        try {
+          const accounts = await provider.send("eth_requestAccounts", []);
+          const account = ethers.utils.getAddress(accounts[0]);
+          const Signer = provider.getSigner();
+  
+          setSigner(Signer);
+          if ( Signer != null ){
+            dispatch({ type: "GET_SIGNER", payload: Signer });
+          }
+  
+          const contractinstance = new ethers.Contract(
+            contractAddress,
+            MyContractArtifact.abi,
+            signer
+          );
+          
+          setContractInstance(contractinstance);
+          console.log('contract instance',ContractInstance);
+          if(ContractInstance != null ){
+            dispatch({ type: "GET_CONTRACT", payload: ContractInstance });
+          }
+          console.log("State after update:", state);
+        } catch (error) {
+          if (error.code === 4001) {
+            console.log("User rejected the connection request.");
+          } else {
+            console.error("An error occurred:", error);
+          }
         }
-
-        const contractinstance = new ethers.Contract(
-          contractAddress,
-          MyContractArtifact.abi,
-          signer
-        );
-
-        setContractInstance(contractinstance);
-        if(contractInstance){
-          dispatch({ type: "GET_CONTRACT", payload: contractInstance });
-        }
-        console.log("State after update:", state);
-      } catch (error) {
-        if (error.code === 4001) {
-          console.log("User rejected the connection request.");
-        } else {
-          console.error("An error occurred:", error);
-        }
-      }
-      console.log('state',state);
-    };
-
-    if (window.ethereum) {
-      window.ethereum.on("accountsChanged", async (accounts) => {
-        if (accounts.length === 0) {
-          console.log("Please connect to MetaMask");
-        } else {
-          await setupSignerAndContract();
-        }
-      });
-      setupSignerAndContract();
-    }
-
-    return () => {
+        console.log('state',state);
+      };
+  
       if (window.ethereum) {
-        window.ethereum.removeListener(
-          "accountsChanged",
-          setupSignerAndContract
-        );
+        window.ethereum.on("accountsChanged", async (accounts) => {
+          if (accounts.length === 0) {
+            console.log("Please connect to MetaMask");
+          } else {
+            await setupSignerAndContract();
+          }
+        });
+        setupSignerAndContract();
       }
-    };
-  }, []);
+  
+      return () => {
+        if (window.ethereum) {
+          window.ethereum.removeListener(
+            "accountsChanged",
+            setupSignerAndContract
+          );
+        }
+      };
+    }
+  }, [state.contract,ContractInstance]);
 
   const connectWallet = async () => {
     if (window.ethereum) {
@@ -121,7 +124,8 @@ const Nav = () => {
         >
           <span className="navbar-toggler-icon"></span>
         </button>
-        {signer && (
+        {console.log('state',state)}
+        {state.status == "Succeed Contract" && (
           <div className="collapse navbar-collapse" id="navbarNav">
             <ul className="navbar-nav">
               <li className="nav-item">

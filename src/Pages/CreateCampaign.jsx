@@ -9,8 +9,11 @@ import 'react-datepicker/dist/react-datepicker.css';
 const CreateCampaign = () => {
   const { state } = useContext(AppContext);
 
-  const [selectDate, setSelectDate] = useState(new Date());
-  const today = new Date();
+  const now = new Date();
+  const today = new Date();  
+  now.setMinutes(now.getMinutes() + 10); 
+  const [selectDate, setSelectDate] = useState(now);
+
 
 
   const [campaignForm, setCampaignForm] = useState({
@@ -26,6 +29,7 @@ const CreateCampaign = () => {
 
   useEffect(() => {
     if (selectDate) { 
+      console.log('selecte Date',selectDate)
         const unixTimestamp = Math.floor(selectDate.getTime() / 1000);
         console.log('Unix Timestamp:', unixTimestamp);
         setCampaignForm((prev)=>({
@@ -49,8 +53,8 @@ const CreateCampaign = () => {
   const submitForm = async (e) => {
     e.preventDefault();
     console.log("form", campaignForm);
+    console.log('state contract',state.contract)
     try {    
-      console.log('state',state)
       const transaction = await state.contract.createCampaign(
         campaignForm.address,
         campaignForm.email,
@@ -68,7 +72,13 @@ const CreateCampaign = () => {
     }
   };
 
-  
+  const getMinTime = () => {
+    const now = new Date();
+    if (selectDate.toDateString() === now.toDateString()) {
+      return now;
+    }
+    return new Date(now.setHours(0, 0, 0, 0));
+  };
 
   return (
     <>
@@ -169,18 +179,17 @@ const CreateCampaign = () => {
               <div className="col-lg-6">
                 <div className="form-box user-icon mb-30">
                   <i className="fa-solid fa-calendar"></i>
-                  {/* <input
-                    name="deadLine"
-                    type="text"
-                    placeholder="enter your deadline"
-                    onChange={(e) => {
-                      handleForm(e, e.target.name);
-                    }}
-                  /> */}
                       <DatePicker 
                       selected={selectDate} 
                       minDate={today}
-                      onChange={handleDateForm} />
+                      onChange={handleDateForm}
+                      timeFormat="HH:mm" 
+                      showTimeSelect
+                      timeIntervals={5}
+                      minTime={getMinTime()}
+                      maxTime={new Date().setHours(23, 55, 0, 0)} 
+                      dateFormat="MMMM d, yyyy h:mm" 
+                      />
                 </div>
               </div>
               <div className="col-12">
@@ -193,7 +202,7 @@ const CreateCampaign = () => {
                     rows="10"
                     placeholder="Enter description for your Campaign"
                     onChange={(e) => {
-                      (e, e.target.name);
+                      handleForm(e, e.target.name);
                     }}
                   ></textarea>
                 </div>

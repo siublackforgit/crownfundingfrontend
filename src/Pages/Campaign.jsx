@@ -6,24 +6,44 @@ import Nav from "../Components/Nav";
 const Campaign = () => {
   const contractAddress = import.meta.env.VITE_CONTRACT_ADDRESS;
   const endPoint = import.meta.env.VITE_LOCAL_BLOCKCHAIN_ENDPOINT;
-  const [campaigns, setCampaigns] = useState([]);
+  const [campaignsId, setCampaignsId] = useState([]);
+  const [campaigns,setCampaigns] = useState([]);
 
   useEffect(()=>{
     const provider = new ethers.providers.JsonRpcProvider(endPoint);
     const myContract = new ethers.Contract(contractAddress,MyContractArtifact.abi,provider)
-    console.log('contract address',contractAddress);
-    console.log('endPoint',endPoint);
-    const getCampaigns = async () => {
+
+    const releaseFundForAllEndedCampaign = async () => {
+      try {
+         await myContract.releaseFundsForEndedCampaigns();
+         console.log('release fund',myContract.releaseFundsForEndedCampaigns());
+      } catch (err) {
+        console.log('error',err)
+      }
+    }
+
+    // const getCampaigns = async () => {
+    //     try {
+    //       const number = await myContract.getAllCampaigns();
+    //       const activeCampaignNumber = await myContract.getActiveCampaignList();
+    //       setCampaigns(number);
+    //       console.log('campaign',campaigns);
+    //     } catch (error) {
+    //       console.log('error',error);
+    //     }
+    //   }
+
+        const getCampaigns = async () => {
         try {
-          const number = await myContract.getAllCampaigns();
-          const activeCampaignNumber = await myContract.getActiveCampaignList();
-          setCampaigns(activeCampaignNumber);
-          console.log('campaign',campaigns);
+          const campaignsIdArray = await myContract.getAllCampaignsId();
+          setCampaignsId(campaignsId);
+          console.log('campaignsId',campaignsId);
         } catch (error) {
           console.log('error',error);
         }
       }
 
+      releaseFundForAllEndedCampaign();
       getCampaigns();
 
   },[])

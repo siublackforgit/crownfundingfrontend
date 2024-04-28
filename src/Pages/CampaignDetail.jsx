@@ -21,6 +21,7 @@ const CampaignDetail = () => {
     provider
   );
   const { campaignId } = useParams();
+  const [currentId, setCurrentId] = useState(null);
   const [currentCampaign, setCurrentCampaign] = useState(null);
 
   const [donationValue, setDonationValue] = useState(null);
@@ -28,10 +29,14 @@ const CampaignDetail = () => {
 
   const [donationError, setDonationError] = useState(false);
 
+  useEffect(()=>{
+    setCurrentId(campaignId);
+  },[campaignId])
+
   useEffect(() => {
     const getCurrentCampaign = async () => {
       try {
-        const campaign = await myContract.getCampaign(campaignId);
+        const campaign = await myContract.getCampaign(currentId);
         setCurrentCampaign({
           ...campaign,
           target: parseFloat(ethers.utils.formatEther(campaign.target)),
@@ -47,16 +52,16 @@ const CampaignDetail = () => {
         console.log("error", error);
       }
     };
+
     getCurrentCampaign();
-  }, []);
+  }, [currentId]);
 
   useEffect(() => {
     const getCurrentDonation = async () => {
       try {
-        console.log("address", state.signer.getAddress());
         const address = state.signer.getAddress();
         const currentDonation = await myContract.displayFund(
-          campaignId,
+          currentId,
           address
         );
 
@@ -75,8 +80,8 @@ const CampaignDetail = () => {
 
   useEffect(() => {
     console.log("current", currentCampaign);
-    const updateAmount = (campaignId, amountCollected) => {
-      if (campaignId == currentCampaign.campaignId) {
+    const updateAmount = (currentId, amountCollected) => {
+      if (currentId == currentCampaign.campaignId) {
         console.log("reach here");
         setCurrentCampaign((prev) => ({
           ...prev,
@@ -85,8 +90,8 @@ const CampaignDetail = () => {
       }
     };
 
-    const releaseFund = (campaignId, amountNotYetSend, amountSendToDonator) => {
-      if (campaignId == currentCampaign.campaignId) {
+    const releaseFund = (currentId, amountNotYetSend, amountSendToDonator) => {
+      if (currentId == currentCampaign.campaignId) {
         console.log("reach here");
         setCurrentCampaign((prev) => ({
           ...prev,
@@ -96,8 +101,8 @@ const CampaignDetail = () => {
       }
     };
 
-    const CancelFund = (campaignId, amountNotYetSend, amountSendToDonator) => {
-      if (campaignId == currentCampaign.campaignId) {
+    const CancelFund = (currentId, amountNotYetSend, amountSendToDonator) => {
+      if (currentId == currentCampaign.campaignId) {
         console.log("reach here");
         setCurrentCampaign((prev) => ({
           ...prev,
@@ -118,12 +123,29 @@ const CampaignDetail = () => {
     };
   }, []);
 
+  const formatUnixTime = (unixTime) => {
+    const date = new Date(unixTime * 1000); // Convert Unix time from seconds to milliseconds
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1; // getMonth() returns month from 0-11
+    const day = date.getDate();
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+
+    // Padding single digits with leading zero
+    const formattedMonth = month < 10 ? `0${month}` : month;
+    const formattedDay = day < 10 ? `0${day}` : day;
+    const formattedHours = hours < 10 ? `0${hours}` : hours;
+    const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
+
+    return `${year}-${formattedMonth}-${formattedDay} ${formattedHours}:${formattedMinutes}`;
+  };
+
   const handleSendSupport = async () => {
     // frontend validation to  check if send value exceed target
     setDonationError(false);
 
     if (
-      donationValue + currentCampaign.amountCollected >=
+      donationValue + currentCampaign.amountCollected >
       currentCampaign.target
     ) {
       setDonationError(true);
@@ -131,15 +153,21 @@ const CampaignDetail = () => {
     }
 
     try {
-      console.log(state.contract);
       if (state.contract) {
-        const sendSupport = await state.contract.donateCampaign(campaignId, {
+        const sendSupport = await state.contract.donateCampaign(currentId, {
           value: ethers.utils.parseEther(donationValue.toString()),
           gasLimit: 500000,
         });
+
+        const receipt = await sendSupport.wait();
+
+        console.log('Transaction confirmed:', receipt);
+        // Optionally, handle the confirmation with a user-friendly message
+        alert('Thank you for your donation! Your transaction has been confirmed.');
       }
     } catch (error) {
       console.log("error", error);
+      alert('Failed to send support');
     }
   };
 
@@ -149,7 +177,7 @@ const CampaignDetail = () => {
         const contractWithSigner = state.contract;
         const signerAddress = state.signer.getAddress();
         const release = await contractWithSigner.releaseFund(
-          campaignId,
+          currentId,
           signerAddress
         );
       }
@@ -162,11 +190,10 @@ const CampaignDetail = () => {
     try {
       console.log("reach here");
       if (state.contract && state.signer) {
-        console.log("contract", state.contract);
         const contractWithSigner = state.contract;
         const signerAddress = state.signer.getAddress();
         const cancel = await contractWithSigner.cancelFund(
-          campaignId,
+          currentId,
           signerAddress,
           ngoAddress
         );
@@ -180,12 +207,27 @@ const CampaignDetail = () => {
     setDonationValue(e.target.value);
   };
 
+  const helpReleaseFund = async () => {
+    try {
+      const contractWithSigner = state.contract;
+      const campaign = await contractWithSigner.releaseFundForEndedCampaign(campaignId);
+    } catch(err) {
+      console.log('err',err)
+    }
+  }
+
   return (
     <>
       <Nav />
       {currentCampaign ? (
-        <>
-          <div>{currentCampaign.title}</div> 
+        <div className="campaignDetail">
+          <div className="causes__img">
+            <img src={currentCampaign.imgAddress} alt="" />
+          </div>
+          <div className="causes__caption">
+            <h4>{currentCampaign.title}</h4>
+          </div>
+          <div>{currentCampaign.title}</div>
           <div>
             <p>{"Target: " + currentCampaign.target}</p>
             <p>
@@ -199,12 +241,19 @@ const CampaignDetail = () => {
                 " ethers"}
             </p>
             <p>
-              {"Amount Not Released send : " +
+              {"Amount of Not Released send : " +
                 currentCampaign.amountNotYetSend +
                 " ethers"}
             </p>
+            <p>
+              {"Campaign DeadLine : " +
+                formatUnixTime(currentCampaign.deadline)}
+            </p>
           </div>
-          {currentCampaign.amountCollected < currentCampaign.target ? (
+          {currentCampaign.amountCollected < currentCampaign.target 
+          &&
+          new Date(currentCampaign.deadline * 1000)  > new Date()
+          ? (
             <div className="support Button">
               <input
                 type="number"
@@ -238,12 +287,33 @@ const CampaignDetail = () => {
                 </div>
               )}
             </div>
-          ) : (
+          ) : 
             <div className="errorMessage">
-              The Campaign Already reached it's target !
+             {currentCampaign.amountCollected >= currentCampaign.target 
+              &&
+              "The Current has reached its target!"
+             } <br />
+             {  new Date(currentCampaign.deadline * 1000)  < new Date() 
+             &&
+            "The campaign has passed its deadline !"
+             }
             </div>
-          )}
-        </>
+           }
+           { 
+           
+           new Date(currentCampaign.deadline * 1000)  < new Date()
+              &&
+             currentCampaign.amountNotYetSend > 0
+             &&
+             <div className="helpRelease">
+             Help to release Saved fund when Campaign deadline passed!
+            <button onClick={helpReleaseFund}>
+             release fund
+            </button>
+           </div>
+           
+           }
+        </div>
       ) : (
         "no Campaign mapped"
       )}
