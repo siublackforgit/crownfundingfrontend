@@ -1,20 +1,19 @@
 import { React, useState, useEffect, useContext } from "react";
-import { AppContext } from "../Reducer/AppContext";
 import { ethers } from "ethers";
 import Nav from "../Components/Nav";
 
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
+import { AppContext } from "../Reducer/AppContext";
+
 const CreateCampaign = () => {
-  const { state } = useContext(AppContext);
+  const { state, blockState, blockDispatch } = useContext(AppContext);
 
   const now = new Date();
   const today = new Date();  
   now.setMinutes(now.getMinutes() + 10); 
   const [selectDate, setSelectDate] = useState(now);
-
-
 
   const [campaignForm, setCampaignForm] = useState({
     address: null,
@@ -65,8 +64,9 @@ const CreateCampaign = () => {
         campaignForm.deadLine,
         campaignForm.description
       );
-      await transaction.wait();
-      console.log("Campaign created successfully!");
+      const succeedTransaction = await transaction.wait();
+      blockDispatch({type:'ADD_BLOCK', payload: succeedTransaction})
+      alert("Campaign created successfully!");
     } catch (error) {
       console.log("Error creating campaign:", error);
     }

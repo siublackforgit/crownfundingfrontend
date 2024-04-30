@@ -5,6 +5,7 @@ import { AppContext } from "../Reducer/AppContext";
 
 import { ethers } from "ethers";
 import MyContractArtifact from "../../../backend/artifacts/contracts/Contract.sol/MyContract.json";
+
 import Nav from "../Components/Nav";
 import { id } from "ethers/lib/utils";
 
@@ -18,20 +19,23 @@ const SupportCampaigns = () => {
   const [campaigns, setCampaigns] = useState([]);
   const { campaignId } = useParams();
 
-  useEffect(()=>{
+  useEffect(() => {
+    async function getBlocks() {
+      const provider = new ethers.providers.JsonRpcProvider(endPoint);
+      const latestBlockNumber = await provider.getBlockNumber();
 
-    const provider = new ethers.providers.JsonRpcProvider(endPoint);
-
-    async function checkBlock(blockNumber) {
-      const block = await provider.getBlock(blockNumber);
-      console.log('Block:', block);
+      for (let blockNumber = 0; blockNumber <= latestBlockNumber; blockNumber++) {
+        const block = await provider.getBlock(blockNumber);
+        console.log(`Block Number: ${blockNumber}`);
+        console.log(`Block Hash: ${block.hash}`);
+        console.log('-------------------');
+      }
     }
-    
-    checkBlock(contractAddress);
-  })
+
+    getBlocks();
+  },[]);
 
   useEffect(() => {
-
     const provider = new ethers.providers.JsonRpcProvider(endPoint);
     const myContract = new ethers.Contract(
       contractAddress,
@@ -43,7 +47,7 @@ const SupportCampaigns = () => {
       try {
         const idArray = [];
         const campaignsArray = [];
-        console.log('hihi')
+        console.log("hihi");
         const campaignsIdArray = await myContract.getAllCampaignsId();
         campaignsIdArray.forEach((id) => {
           const idString = id.toString();
@@ -61,9 +65,9 @@ const SupportCampaigns = () => {
         console.log("err", err);
       }
     };
-    console.log('state',state)
+    console.log("state", state);
 
-    if ( state.status == 'Succeed Contract') {
+    if (state.status == "Succeed Contract") {
       getCampaignList();
     }
   }, [state.status]);
@@ -83,7 +87,7 @@ const SupportCampaigns = () => {
     const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
 
     return `${year}-${formattedMonth}-${formattedDay} ${formattedHours}:${formattedMinutes}`;
-}
+  };
 
   return (
     <>
@@ -103,14 +107,13 @@ const SupportCampaigns = () => {
             </div>
           </div>
           <div className="row">
-            {console.log('campaigns',campaigns)}
+            {console.log("campaigns", campaigns)}
             {campaigns &&
               campaigns.length > 0 &&
               campaigns.map((item, key) =>
-              new Date(item.deadline * 1000)  > new Date()
-              && 
-              parseFloat(ethers.utils.formatEther(item.target)) > parseFloat(ethers.utils.formatEther(item.amountCollected))              
-                ? (
+                new Date(item.deadline * 1000) > new Date() &&
+                parseFloat(ethers.utils.formatEther(item.target)) >
+                  parseFloat(ethers.utils.formatEther(item.amountCollected)) ? (
                   <div
                     index={key}
                     className="col-xl-4 col-lg-4 col-md-6 support-campaign-card"
@@ -132,27 +135,33 @@ const SupportCampaigns = () => {
                         <p>
                           {"Campaign ID: " + parseInt(item.campaignId._hex, 16)}
                         </p>
-                        <p>{"Target: " + parseFloat(ethers.utils.formatEther(item.target)) + " ethers"}
+                        <p>
+                          {"Target: " +
+                            parseFloat(ethers.utils.formatEther(item.target)) +
+                            " ethers"}
                         </p>
                         <p>
                           {"Amount Collected: " +
-                           parseFloat(ethers.utils.formatEther(item.amountCollected)) +
+                            parseFloat(
+                              ethers.utils.formatEther(item.amountCollected)
+                            ) +
                             " ethers"}
                         </p>
                         <p>
                           {"Amount sent to Donator : " +
-                        parseFloat(ethers.utils.formatEther(item.amountSendToDonator)) +
+                            parseFloat(
+                              ethers.utils.formatEther(item.amountSendToDonator)
+                            ) +
                             " ethers"}
                         </p>
                         <p>
                           {"Amount sent to Ngo : " +
-                        parseFloat(ethers.utils.formatEther(item.amountSendToNgo))  +
+                            parseFloat(
+                              ethers.utils.formatEther(item.amountSendToNgo)
+                            ) +
                             " ethers"}
                         </p>
-                        <p>
-                        {"Deadline : " +
-                        formatUnixTime(item.deadline)}
-                        </p>
+                        <p>{"Deadline : " + formatUnixTime(item.deadline)}</p>
                       </div>
                     </div>
                   </div>
@@ -167,14 +176,13 @@ const SupportCampaigns = () => {
             </div>
           </div>
           <div className="row">
-            {console.log('campiagns',campaigns)}
+            {console.log("campiagns", campaigns)}
             {campaigns &&
               campaigns.length > 0 &&
               campaigns.map((item, key) =>
-              new Date() > new Date(item.deadline * 1000)  
-              ||
-              parseFloat(ethers.utils.formatEther(item.amountCollected)) >= parseFloat(ethers.utils.formatEther(item.target))   
-               ? (
+                new Date() > new Date(item.deadline * 1000) ||
+                parseFloat(ethers.utils.formatEther(item.amountCollected)) >=
+                  parseFloat(ethers.utils.formatEther(item.target)) ? (
                   <div
                     index={key}
                     className="col-xl-4 col-lg-4 col-md-6 support-campaign-card"
@@ -196,36 +204,41 @@ const SupportCampaigns = () => {
                         <p>
                           {"Campaign ID: " + parseInt(item.campaignId._hex, 16)}
                         </p>
-                        <p>{"Target: " + parseFloat(ethers.utils.formatEther(item.target)) + " ethers"}
+                        <p>
+                          {"Target: " +
+                            parseFloat(ethers.utils.formatEther(item.target)) +
+                            " ethers"}
                         </p>
                         <p>
                           {"Amount Collected: " +
-                           parseFloat(ethers.utils.formatEther(item.amountCollected)) +
+                            parseFloat(
+                              ethers.utils.formatEther(item.amountCollected)
+                            ) +
                             " ethers"}
                         </p>
                         <p>
                           {"Amount sent to Donator : " +
-                        parseFloat(ethers.utils.formatEther(item.amountSendToDonator)) +
+                            parseFloat(
+                              ethers.utils.formatEther(item.amountSendToDonator)
+                            ) +
                             " ethers"}
                         </p>
                         <p>
                           {"Amount sent to Ngo : " +
-                        parseFloat(ethers.utils.formatEther(item.amountSendToNgo))  +
+                            parseFloat(
+                              ethers.utils.formatEther(item.amountSendToNgo)
+                            ) +
                             " ethers"}
                         </p>
-                        <p>
-                        {"Deadline : " +
-                        formatUnixTime(item.deadline)}
-                        </p>
+                        <p>{"Deadline : " + formatUnixTime(item.deadline)}</p>
                         <div className="errorMessage">
-                        This Campaign has completed
-                      </div>
+                          This Campaign has completed
+                        </div>
                       </div>
                     </div>
                   </div>
                 ) : null
-              )
-              }
+              )}
           </div>
         </div>
       </section>
