@@ -8,12 +8,19 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { AppContext } from "../Reducer/AppContext";
 
 const CreateCampaign = () => {
+  // browser signer
+  const browserProvider = new ethers.providers.Web3Provider(window.ethereum);
+  const browserSigner = browserProvider.getSigner();
+
   const { state, blockState, blockDispatch } = useContext(AppContext);
 
   const now = new Date();
   const today = new Date();  
   now.setMinutes(now.getMinutes() + 10); 
+
   const [selectDate, setSelectDate] = useState(now);
+
+  const [signerAddress,setSignerAddress] = useState(null);
 
   const [campaignForm, setCampaignForm] = useState({
     address: null,
@@ -25,6 +32,22 @@ const CreateCampaign = () => {
     deadLine: null,
     description: null,
   });
+
+  useEffect(()=>{
+    const getAddress = async () => {
+      try {
+        const address = await browserSigner.getAddress();
+        setSignerAddress(address);
+        console.log('signer address',signerAddress);
+      } catch (error) {
+        console.error("Error retrieving signer address:", error);
+        return null;
+      }
+    };
+    
+    // Call this function to log the address
+    getAddress();
+  },[browserProvider])
 
   useEffect(() => {
     if (selectDate) { 
@@ -56,6 +79,7 @@ const CreateCampaign = () => {
     try {    
       const transaction = await state.contract.createCampaign(
         campaignForm.address,
+        signerAddress,
         campaignForm.email,
         campaignForm.imgAddress,
         campaignForm.title,
@@ -65,7 +89,7 @@ const CreateCampaign = () => {
         campaignForm.description
       );
       const succeedTransaction = await transaction.wait();
-      blockDispatch({type:'ADD_BLOCK', payload: succeedTransaction})
+      // blockDispatch({type:'ADD_BLOCK', payload: succeedTransaction})
       alert("Campaign created successfully!");
     } catch (error) {
       console.log("Error creating campaign:", error);

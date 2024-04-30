@@ -90,7 +90,7 @@ const Nav = () => {
             );
             if (contractinstance) {
               setContractInstance(contractinstance);
-              dispatch({ type: "GET_CONTRACT", payload: contractInstance });
+              dispatch({ type: "GET_CONTRACT", payload: ContractInstance });
               console.log("state", state);
             }
           }
@@ -142,7 +142,7 @@ const Nav = () => {
           </div>
         )}
         <button className="connect-button" onClick={connectWallet}>
-          {signer ? `Connected` : "Connect to Wallet"}
+          {state.status == "Succeed Contract" ? `Connected` : "Connect to Wallet"}
         </button>
       </div>
     </nav>

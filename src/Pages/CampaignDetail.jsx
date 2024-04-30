@@ -10,6 +10,7 @@ import { AppContext } from "../Reducer/AppContext";
 const CampaignDetail = () => {
   const { state } = useContext(AppContext);
 
+  // contract
   const contractAddress = import.meta.env.VITE_CONTRACT_ADDRESS;
   const endPoint = import.meta.env.VITE_LOCAL_BLOCKCHAIN_ENDPOINT;
   const ngoAddress = import.meta.env.VITE_NGO_ADDRESS;
@@ -20,6 +21,11 @@ const CampaignDetail = () => {
     MyContractArtifact.abi,
     provider
   );
+
+  // browser 
+  const browserProvider = new ethers.providers.Web3Provider(window.ethereum);
+  const browserSigner = browserProvider.getSigner();
+
   const { campaignId } = useParams();
   const [currentId, setCurrentId] = useState(null);
   const [currentCampaign, setCurrentCampaign] = useState(null);
@@ -28,6 +34,22 @@ const CampaignDetail = () => {
   const [backerDonation, setBackerDonation] = useState(null);
 
   const [donationError, setDonationError] = useState(false);
+
+  useEffect(()=>{
+    const getAddress = async () => {
+      try {
+        const address = await browserSigner.getAddress();
+        console.log("Signer Address:", address);
+        return address;
+      } catch (error) {
+        console.error("Error retrieving signer address:", error);
+        return null;
+      }
+    };
+    
+    // Call this function to log the address
+    getAddress();
+  },[])
 
   useEffect(()=>{
     setCurrentId(campaignId);
@@ -313,6 +335,9 @@ const CampaignDetail = () => {
            </div>
            
            }
+          {
+            console.log('current owner',currentCampaign.signer,'current signer 111', browserSigner) 
+          }
         </div>
       ) : (
         "no Campaign mapped"
