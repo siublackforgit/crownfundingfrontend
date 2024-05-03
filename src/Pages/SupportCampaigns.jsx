@@ -187,11 +187,11 @@ const SupportCampaigns = () => {
                     index={key}
                     className="col-xl-4 col-lg-4 col-md-6 support-campaign-card"
                     key={item.campaignId._hex} // Assuming campaignId is unique
-                    onClick={() => {
-                      const intId = parseInt(item.campaignId._hex, 16); // Making sure to parse as hex
-                      console.log("intId", intId);
-                      navigate(`/supportcampaigns/detail/${intId}`);
-                    }}
+                    // onClick={() => {
+                    //   const intId = ; // Making sure to parse as hex
+                    //   console.log("intId", intId);
+                    //   navigate(`/supportcampaigns/detail/${intId}`);
+                    // }}
                   >
                     <div className="causes white-bg mb-30">
                       <div className="causes__img">
@@ -201,8 +201,11 @@ const SupportCampaigns = () => {
                         <h4>{item.title}</h4>
                       </div>
                       <div className="causes_info">
+                        <Link to={`/supportcampaigns/detail/${parseInt(item.campaignId._hex, 16)}`}>
+                        {"Campaign ID: " + item.title}
+                        </Link>
                         <p>
-                          {"Campaign ID: " + parseInt(item.campaignId._hex, 16)}
+                          {"Creator Email: " + item.emailAddress}
                         </p>
                         <p>
                           {"Target: " +

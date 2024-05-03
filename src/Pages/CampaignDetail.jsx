@@ -155,20 +155,20 @@ const CampaignDetail = () => {
     const getProofOfWork = async () => {
       try {
         const displayProofOfWork = await myContract.getProofsOfWork(currentId);
-        // Assuming displayProofOfWork is an object and can be uniquely identified
-        setProofOfWork((prev) => {
-          // Check if the proof of work already exists in the state
-          const exists = prev.some(
-            (proof) => proof.content === displayProofOfWork.content
-          );
-          if (!exists) {
-            return [...prev, displayProofOfWork]; // Return new array with the new proof
-          }
-          return prev; // Return previous state unchanged if it already includes the current proof
-        });
+        if (displayProofOfWork){
+          setProofOfWork((prev) => {
+            // Check if the proof of work already exists in the state
+            const exists = prev.some(
+              (proof) => proof.content === displayProofOfWork.content
+            );
+            if (!exists) {
+              return [...prev, displayProofOfWork]; // Return new array with the new proof
+            }
+            return prev; // Return previous state unchanged if it already includes the current proof
+          });
+        }
       } catch (err) {
         console.log("Error:", err);
-        alert("Failed to get proof of work");
       }
     };
 
@@ -304,6 +304,9 @@ const CampaignDetail = () => {
     }
   };
 
+  useEffect(()=>{
+  },[])
+
   return (
     <>
       <Nav />
@@ -393,18 +396,18 @@ const CampaignDetail = () => {
                 <button onClick={helpReleaseFund}>release fund</button>
               </div>
             )}
-          {proofOfWork &&
-            proofOfWork.length > 0 &&
+          {
+           ( proofOfWork.length > 0) == true &&
             proofOfWork.map((item, index) => {
-              console.log("item", item[0].dataType);
+              console.log("item", item[0]?.dataType);
               return (
                 // Ensure that you are returning something from the map function
-                item[0].dataType === "image" && ( // Use === for strict comparison and wrap JSX in parentheses
+                item[0]?.dataType === "image" && ( // Use === for strict comparison and wrap JSX in parentheses
                   <div key={index} className="proofOfWork">
                     <h4>{`Proof Of Work Number ${index}`}</h4>
-                    <img src={item[0].content} alt="" />
+                    <img src={item[0]?.content} alt="" />
                     <div>
-                      {item[0].description}
+                      {item[0]?.description}
                     </div>
                   </div>
                 )

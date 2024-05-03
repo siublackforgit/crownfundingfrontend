@@ -180,7 +180,7 @@ const CreateCampaign = () => {
                   <input
                     name="target"
                     type="text"
-                    placeholder="Your target"
+                    placeholder="Please Enter Your Target in ethers"
                     onChange={(e) => {
                       handleForm(e, e.target.name);
                     }}
@@ -212,7 +212,7 @@ const CreateCampaign = () => {
                       timeIntervals={5}
                       minTime={getMinTime()}
                       maxTime={new Date().setHours(23, 55, 0, 0)} 
-                      dateFormat="MMMM d, yyyy h:mm" 
+                      dateFormat="MMMM d, yyyy HH:mm" 
                       />
                 </div>
               </div>
