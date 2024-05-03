@@ -1,5 +1,5 @@
 import { React, useState, useEffect, useContext } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, Link } from "react-router-dom";
 
 import { AppContext } from "../Reducer/AppContext";
 
@@ -8,6 +8,8 @@ import MyContractArtifact from "../../../backend/artifacts/contracts/Contract.so
 
 import Nav from "../Components/Nav";
 import { id } from "ethers/lib/utils";
+
+import ProgressBar from 'react-bootstrap/ProgressBar';
 
 const SupportCampaigns = () => {
   const contractAddress = import.meta.env.VITE_CONTRACT_ADDRESS;
@@ -209,15 +211,8 @@ const SupportCampaigns = () => {
                         </h4>
                       </div>
                       <div className="causes_info">
-                        {/* <Link
-                          to={`/supportcampaigns/detail/${parseInt(
-                            item.campaignId._hex,
-                            16
-                          )}`}
-                        >
-                          {"Campaign ID: " + item.title}
-                        </Link> */}
                         <p>{"Creator Email: " + item.emailAddress}</p>
+                        <ProgressBar now={60} label={`${60}%`} />
                         <p>
                           {"Target: " +
                             parseFloat(ethers.utils.formatEther(item.target)) +
