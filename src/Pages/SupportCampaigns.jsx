@@ -24,16 +24,20 @@ const SupportCampaigns = () => {
       const provider = new ethers.providers.JsonRpcProvider(endPoint);
       const latestBlockNumber = await provider.getBlockNumber();
 
-      for (let blockNumber = 0; blockNumber <= latestBlockNumber; blockNumber++) {
+      for (
+        let blockNumber = 0;
+        blockNumber <= latestBlockNumber;
+        blockNumber++
+      ) {
         const block = await provider.getBlock(blockNumber);
         console.log(`Block Number: ${blockNumber}`);
         console.log(`Block Hash: ${block.hash}`);
-        console.log('-------------------');
+        console.log("-------------------");
       }
     }
 
     getBlocks();
-  },[]);
+  }, []);
 
   useEffect(() => {
     const provider = new ethers.providers.JsonRpcProvider(endPoint);
@@ -198,15 +202,22 @@ const SupportCampaigns = () => {
                         <img src={item.imgAddress} alt="" />
                       </div>
                       <div className="causes__caption">
-                        <h4>{item.title}</h4>
+                        <h4>
+                        <Link to={`/supportcampaigns/detail/${parseInt(item.campaignId._hex, 16)}`}>
+                        {item.title}
+                        </Link>
+                        </h4>
                       </div>
                       <div className="causes_info">
-                        <Link to={`/supportcampaigns/detail/${parseInt(item.campaignId._hex, 16)}`}>
-                        {"Campaign ID: " + item.title}
-                        </Link>
-                        <p>
-                          {"Creator Email: " + item.emailAddress}
-                        </p>
+                        {/* <Link
+                          to={`/supportcampaigns/detail/${parseInt(
+                            item.campaignId._hex,
+                            16
+                          )}`}
+                        >
+                          {"Campaign ID: " + item.title}
+                        </Link> */}
+                        <p>{"Creator Email: " + item.emailAddress}</p>
                         <p>
                           {"Target: " +
                             parseFloat(ethers.utils.formatEther(item.target)) +

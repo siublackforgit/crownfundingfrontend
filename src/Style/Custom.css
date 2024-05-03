@@ -234,7 +234,6 @@ p {
   text-align: center;
 }
 
-
 /* create campaign page */
 
 .contact-form input ,textarea{
@@ -291,7 +290,16 @@ p {
 }
 
 .support-campaign-card h4{
-  text-align: center;
+  text-align: left;
+  cursor: pointer;
+  font-family:"Poppins", sans-serif;
+  font-weight:600;
+  color: #062a4d;
+  transition: all 0.3s ease-out 0s
+}
+
+.support-campaign-card h4:hover{
+  color: #007bff;
 }
 
 .causes__img{
