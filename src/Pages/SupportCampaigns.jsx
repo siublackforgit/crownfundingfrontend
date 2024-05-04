@@ -138,46 +138,46 @@ const SupportCampaigns = () => {
                         <h4>{item.title}</h4>
                       </div>
                       <div className="causes_info">
-                        <ProgressBar
-                          now={parseFloat(
-                            ethers.utils.formatEther(item.amountCollected)
-                          )}
-                          max={parseFloat(
-                            ethers.utils.formatEther(item.target)
-                          )}
-                          label={`${parseFloat(
-                            ethers.utils.formatEther(item.amountCollected)
-                          )} / ${parseFloat(
-                            ethers.utils.formatEther(item.target)
-                          )}`}
-                        />
-                        <p>
-                          {"Target: " +
-                            parseFloat(ethers.utils.formatEther(item.target)) +
-                            " ethers"}
-                        </p>
-                        <p>
-                          {"Amount Collected: " +
-                            parseFloat(
+                        <div className="progress-bar">
+                          <ProgressBar
+                            now={parseFloat(
                               ethers.utils.formatEther(item.amountCollected)
-                            ) +
-                            " ethers"}
-                        </p>
-                        <p>
-                          {"Amount sent to Donator : " +
-                            parseFloat(
-                              ethers.utils.formatEther(item.amountSendToDonator)
-                            ) +
-                            " ethers"}
-                        </p>
-                        <p>
-                          {"Amount sent to Ngo : " +
-                            parseFloat(
-                              ethers.utils.formatEther(item.amountSendToNgo)
-                            ) +
-                            " ethers"}
-                        </p>
-                        <p>{"Deadline : " + formatUnixTime(item.deadline)}</p>
+                            )}
+                            max={parseFloat(
+                              ethers.utils.formatEther(item.target)
+                            )}
+                            label={`${parseFloat(
+                              ethers.utils.formatEther(item.amountCollected)
+                            )} / ${parseFloat(
+                              ethers.utils.formatEther(item.target)
+                            )}`}
+                          />
+                          <div className="fund-desc">
+                            <div className="fund-info count-number f-left text-left">
+                              <h2>
+                                {"$" +
+                                  parseFloat(
+                                    ethers.utils.formatEther(item.amountCollected)
+                                  ) +
+                                  " ethers"}
+                              </h2>
+                              <span>Amounted donated</span>
+                            </div>
+                            <div className="fund-info count-number f-right text-right">
+                              <h2>
+                                {"$" +
+                                  parseFloat(
+                                    ethers.utils.formatEther(
+                                      item.target
+                                    )
+                                  ) +
+                                  " ethers"}
+                              </h2>
+                              <span>target</span>
+                            </div>
+                          </div>
+                        </div>
+                        <p >{"Deadline : " + formatUnixTime(item.deadline)}</p>
                       </div>
                     </div>
                   </div>

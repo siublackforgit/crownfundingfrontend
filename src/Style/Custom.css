@@ -2,6 +2,11 @@
 @import url("https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700&display=swap");
 
+/* body */
+
+
+/* nav bar */
+
 .navbar {
   position: sticky;
   top: 0;
@@ -71,6 +76,7 @@ h1 {
 }
 
 p {
+  font-family: "Rubik", sans-serif;
   font-size: 16px;
   line-height: 28px;
   margin-bottom: 35px;
@@ -344,3 +350,33 @@ p {
   text-decoration: none;
 }
 
+/* support campaign */
+
+.fund-desc{
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.count-number h2{
+  font-size: 20px;
+  font-family:"Poppins", sans-serif;
+  color:#062a4d;
+  font-weight:600;
+  margin-bottom: 0px;
+}
+
+.count-number span {
+  font-size: 12px;
+  font-family: "Rubik", sans-serif;
+  font-weight:400;
+  color:#6f7172;
+}
+
+
+.causes_info p {
+  font-family: "Rubik", sans-serif;
+  font-size: 12px;
+  color:#3a516c;
+  font-weight:400;
+}
