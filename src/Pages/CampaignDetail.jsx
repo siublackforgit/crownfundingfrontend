@@ -7,6 +7,8 @@ import { ethers } from "ethers";
 import Nav from "../Components/Nav";
 import { AppContext } from "../Reducer/AppContext";
 
+import { ProgressBar } from "react-bootstrap";
+
 const CampaignDetail = () => {
   const { state } = useContext(AppContext);
 
@@ -74,6 +76,12 @@ const CampaignDetail = () => {
           amountNotYetSend: parseFloat(
             ethers.utils.formatEther(campaign.amountNotYetSend)
           ),
+          amountSendToDonator: parseFloat(
+            ethers.utils.formatEther(campaign.amountSendToDonator)
+          ),
+          amountSendToNgo: parseFloat(
+            ethers.utils.formatEther(campaign.amountSendToNgo)
+          ),
         });
         // console.log("campaigns", campaign);
       } catch (error) {
@@ -82,6 +90,7 @@ const CampaignDetail = () => {
     };
 
     getCurrentCampaign();
+    console.log("current campaign", currentCampaign);
   }, [currentId]);
 
   useEffect(() => {
@@ -155,7 +164,7 @@ const CampaignDetail = () => {
     const getProofOfWork = async () => {
       try {
         const displayProofOfWork = await myContract.getProofsOfWork(currentId);
-        if (displayProofOfWork){
+        if (displayProofOfWork) {
           setProofOfWork((prev) => {
             // Check if the proof of work already exists in the state
             const exists = prev.some(
@@ -269,6 +278,7 @@ const CampaignDetail = () => {
       const campaign = await contractWithSigner.releaseFundForEndedCampaign(
         campaignId
       );
+      alert("succeed release left fund");
     } catch (err) {
       console.log("err", err);
     }
@@ -276,8 +286,6 @@ const CampaignDetail = () => {
 
   const proofOfWorkSubmit = (e) => {
     e.preventDefault();
-    // console.log('des ref',descriptionRef.current.value);
-    // console.log('select ref',dataTypeRef.current.value);
     const addProofOfWork = async () => {
       try {
         const contractWithSigner = state.contract;
@@ -287,6 +295,7 @@ const CampaignDetail = () => {
           contentRef.current.value,
           descriptionRef.current.value
         );
+        alert('succeed added proof of Work!')
       } catch (err) {
         console.log("err", err);
         alert("added proof of work fail");
@@ -304,57 +313,70 @@ const CampaignDetail = () => {
     }
   };
 
-  useEffect(()=>{
-  },[])
-
   return (
     <>
       <Nav />
       {currentCampaign ? (
         <div className="campaignDetail">
+          <div className="fund-title">
+            <h1>{currentCampaign.title}</h1>
+          </div>
+          <div className="fund-desc">
+            <p>{currentCampaign.description}</p>
+          </div>
           <div className="causes__img">
             <img src={currentCampaign.imgAddress} alt="" />
           </div>
-          <div className="causes__caption">
-            <h4>{currentCampaign.title}</h4>
-          </div>
-          <div>{currentCampaign.title}</div>
           <div>
-            <p>{"Target: " + currentCampaign.target}</p>
-            <p>
-              {"Amount Collected : " +
-                currentCampaign.amountCollected +
-                " ethers"}
-            </p>
-            <p>
-              {"Amount of donation required: " +
-                (currentCampaign.target - currentCampaign.amountCollected) +
-                " ethers"}
-            </p>
-            <p>
-              {"Amount of Not Released send : " +
-                currentCampaign.amountNotYetSend +
-                " ethers"}
-            </p>
-            <p>
+            <div className="progress-bar">
+              <ProgressBar
+                now={currentCampaign.amountCollected}
+                max={currentCampaign.target}
+                label={`${currentCampaign.amountCollected} / ${currentCampaign.target}`}
+              />
+              <div className="fund-desc">
+                <div className="fund-count">
+                  <h2>{`$ ${currentCampaign.amountCollected} ethers`}</h2>
+                  <span>Amount Donated</span>
+                </div>
+                <div className="fund-count">
+                  <h2>{`$ ${currentCampaign.target} ethers`}</h2>
+                  <span>Target</span>
+                </div>
+                <div className="fund-count">
+                  <h2>{`$ ${currentCampaign.amountNotYetSend} ethers`}</h2>
+                  <span>amount Not Yet Send</span>
+                </div>
+              </div>
+            </div>
+            <div className="fund-count">
+              <span>Amount Send To Donator : $ </span>
+              <span>{currentCampaign.amountSendToDonator}</span>
+            </div>
+            <div className="fund-count">
+              <span>Amount Send To Ngo : $ </span>
+              <span>{currentCampaign.amountSendToNgo}</span>
+            </div>
+            <p className="camp-detail-deadline">
               {"Campaign DeadLine : " +
                 formatUnixTime(currentCampaign.deadline)}
             </p>
           </div>
           {currentCampaign.amountCollected < currentCampaign.target &&
           new Date(currentCampaign.deadline * 1000) > new Date() ? (
-            <div className="support Button">
+            <div className="support-Button">
               <input
                 type="number"
                 id="numberInput"
                 min="0.001"
                 max="100"
+                step="0.01"
                 value={donationValue}
-                defaultValue={1}
+                defaultValue="1.00"
                 onChange={handleDonationValue}
               />
               <br />
-              <button onClick={handleSendSupport}>
+              <button className="btn" onClick={handleSendSupport}>
                 Send Your Support
               </button>{" "}
               <br />
@@ -376,7 +398,7 @@ const CampaignDetail = () => {
                 </div>
               ) : (
                 <div>
-                  <p>You havent support this campaign yet</p>
+                  <p className="errorMessage">You havent support this campaign yet !</p>
                 </div>
               )}
             </div>
@@ -392,12 +414,15 @@ const CampaignDetail = () => {
           {new Date(currentCampaign.deadline * 1000) < new Date() &&
             currentCampaign.amountNotYetSend > 0 && (
               <div className="helpRelease">
-                Help to release Saved fund when Campaign deadline passed!
-                <button onClick={helpReleaseFund}>release fund</button>
+                <span>
+                  Help to release Saved fund when Campaign deadline passed!
+                </span>
+                <button className="btn camp-detail" onClick={helpReleaseFund}>
+                  release fund
+                </button>
               </div>
             )}
-          {
-           ( proofOfWork.length > 0) == true &&
+          {proofOfWork.length > 0 == true &&
             proofOfWork.map((item, index) => {
               console.log("item", item[0]?.dataType);
               return (
@@ -406,9 +431,7 @@ const CampaignDetail = () => {
                   <div key={index} className="proofOfWork">
                     <h4>{`Proof Of Work Number ${index}`}</h4>
                     <img src={item[0]?.content} alt="" />
-                    <div>
-                      {item[0]?.description}
-                    </div>
+                    <div>{item[0]?.description}</div>
                   </div>
                 )
               );
@@ -417,20 +440,21 @@ const CampaignDetail = () => {
             new Date(currentCampaign.deadline * 1000) > new Date() &&
             currentCampaign.signer == signerAddress && (
               <form onSubmit={proofOfWorkSubmit}>
-                <select name="dataType" ref={dataTypeRef} defaultValue="image">
+                <select className="select" name="dataType" ref={dataTypeRef} defaultValue="image">
                   <option value="image">Image</option>
                   <option value="text">Text</option>
                   <option value="video">video</option>
                 </select>
-                <input type="text" ref={contentRef} />
+                <input className="proofOfWork-input" type="text" ref={contentRef} placeholder="Please Input Your Url"/>
                 <textarea
-                  name="des"
+                  className="desc"
                   ref={descriptionRef}
                   id=""
                   cols="30"
                   rows="10"
+                  placeholder="please enter your description here"
                 ></textarea>
-                <button type="submit">Add proof of Work</button>
+                <button className="btn" type="submit">Add proof of Work</button>
               </form>
             )}
         </div>

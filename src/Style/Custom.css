@@ -291,6 +291,21 @@ p {
   letter-spacing: 2px;
 }
 
+/* support campaign */
+
+.causes__caption h4 a{
+  text-decoration: none;
+  color: #0056b3;
+}
+
+.causes__caption h4 a:hover{
+  color: #1b70f0;
+}
+
+.causes_info p {
+  margin-bottom: 0px;
+}
+
 .support-campaign-card h4{
   text-align: left;
   cursor: pointer;
@@ -320,18 +335,38 @@ p {
 
 
 
-/* campaign detail */
-
-.errorMessage{
-  color: red;
+/* campaig detail */
+.fund-count h2 {
+  font-family:"Poppins", sans-serif;
+  color:#062a4d;
+  font-weight:600;
 }
 
-.campaignDetail{
-  width: 80%;
-  margin: auto;
+.fund-count span {
+  font-size: 18px;
+  font-weight: 400;
+  color:#6f7172;
 }
 
+.camp-detail{
+  margin-left: 10px;
+}
 
+.fund-desc{
+  margin-bottom: 40px;
+}
+
+.camp-detail-deadline {
+  margin-bottom: 0px;
+}
+
+.support-Button input{
+  margin: 15px 0px;
+}
+
+.support-Button .btn{
+  margin-bottom: 15px;
+}
 
 /* footer */
 
@@ -379,4 +414,59 @@ p {
   font-size: 12px;
   color:#3a516c;
   font-weight:400;
+}
+
+.errorMessage{
+  color: red;
+}
+
+.campaignDetail{
+  width: 80%;
+  margin: auto;
+}
+
+.fund-desc p{
+  margin: 28px 0px;
+}
+
+
+/* general */
+
+.btn:hover {
+  background-color: #1b70f0;
+  color: white;
+  transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+}
+
+.desc {
+  width: 100%; /* Responsive width */
+  height: 150px; /* Fixed height, but can be adjusted */
+  padding: 10px; /* Padding inside the textarea */
+  border: 1px solid #ccc; /* Light grey border */
+  border-radius: 8px; /* Rounded corners */
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1); /* Subtle inner shadow for depth */
+  background-color: #fff; /* White background */
+  font-size: 16px; /* Adequate font size for readability */
+  color: #333; /* Dark grey text color for contrast */
+  resize: vertical; /* Allow vertical resizing only */
+  outline: none; /* Remove the default focus outline */
+  transition: border-color 0.3s, box-shadow 0.3s; /* Smooth transition for focus effects */
+}
+
+.select{
+  width: 100%; /* Responsive width */
+  padding: 10px; /* Padding inside the elements */
+  border: 1px solid #ccc; /* Light grey border */
+  border-radius: 8px; /* Rounded corners */
+  background-color: #fff; /* White background */
+  font-size: 16px; /* Adequate font size for readability */
+  color: #333; /* Dark grey text color for contrast */
+  resize: vertical; /* Allow vertical resizing only for textarea */
+  outline: none; /* Remove the default focus outline */
+  transition: border-color 0.3s, box-shadow 0.3s; /* Smooth transition for focus effects */
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1); /* Subtle inner shadow for depth */
+}
+
+.proofOfWork-input{
+  width: 100%;
 }
