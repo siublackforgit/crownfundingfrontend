@@ -157,7 +157,9 @@ const SupportCampaigns = () => {
                               <h2>
                                 {"$" +
                                   parseFloat(
-                                    ethers.utils.formatEther(item.amountCollected)
+                                    ethers.utils.formatEther(
+                                      item.amountCollected
+                                    )
                                   ) +
                                   " ethers"}
                               </h2>
@@ -167,9 +169,7 @@ const SupportCampaigns = () => {
                               <h2>
                                 {"$" +
                                   parseFloat(
-                                    ethers.utils.formatEther(
-                                      item.target
-                                    )
+                                    ethers.utils.formatEther(item.target)
                                   ) +
                                   " ethers"}
                               </h2>
@@ -202,7 +202,7 @@ const SupportCampaigns = () => {
                   <div
                     index={key}
                     className="col-xl-4 col-lg-4 col-md-6 support-campaign-card"
-                    key={item.campaignId._hex} 
+                    key={item.campaignId._hex}
                   >
                     <div className="causes white-bg mb-30">
                       <div className="causes__img">
@@ -235,30 +235,34 @@ const SupportCampaigns = () => {
                             ethers.utils.formatEther(item.target)
                           )}`}
                         />
-                          <div className="fund-desc">
-                            <div className="fund-info count-number f-left text-left">
-                              <h2>
-                                {"$" +
-                                  parseFloat(
-                                    ethers.utils.formatEther(item.amountCollected)
-                                  ) +
-                                  " ethers"}
-                              </h2>
-                              <span>Amounted donated</span>
-                            </div>
-                            <div className="fund-info count-number f-right text-right">
-                              <h2>
-                                {"$" +
-                                  parseFloat(
-                                    ethers.utils.formatEther(
-                                      item.target
-                                    )
-                                  ) +
-                                  " ethers"}
-                              </h2>
-                              <span>target</span>
-                            </div>
+                        <div className="fund-desc">
+                          <div className="fund-info count-number f-left text-left">
+                            <h2>
+                              {"$" +
+                                parseFloat(
+                                  ethers.utils.formatEther(item.amountCollected)
+                                ) +
+                                " ethers"}
+                            </h2>
+                            <span>Amounted donated</span>
                           </div>
+                          <div className="fund-info count-number f-right text-right">
+                            <h2>
+                              {"$" +
+                                parseFloat(
+                                  ethers.utils.formatEther(item.target)
+                                ) +
+                                " ethers"}
+                            </h2>
+                            <span>target</span>
+                          </div>
+                        </div>
+                        <p>{`Amount Not Yet Send: ${parseFloat(
+                          ethers.utils.formatEther(item.amountNotYetSend)
+                        )}`}</p>
+                        {parseFloat(
+                          ethers.utils.formatEther(item.amountNotYetSend)
+                        ) > 0 && <div className="errorMessage">Please Enter And Help Release Fund</div>}
                         <p>{"Deadline : " + formatUnixTime(item.deadline)}</p>
                         <div className="errorMessage">
                           This Campaign has completed

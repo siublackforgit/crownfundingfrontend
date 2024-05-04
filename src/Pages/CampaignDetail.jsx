@@ -429,9 +429,10 @@ const CampaignDetail = () => {
                 // Ensure that you are returning something from the map function
                 item[0]?.dataType === "image" && ( // Use === for strict comparison and wrap JSX in parentheses
                   <div key={index} className="proofOfWork">
-                    <h4>{`Proof Of Work Number ${index}`}</h4>
-                    <img src={item[0]?.content} alt="" />
-                    <div>{item[0]?.description}</div>
+                    <h4>{`Proof Of Work`}</h4>
+                    <span>{`Number ${index + 1}`}</span>
+                    <img className="proofOfWork-img" src={item[0]?.content} alt="" />
+                    <div>{`description :  ${item[0]?.description}`}</div>
                   </div>
                 )
               );
@@ -439,6 +440,8 @@ const CampaignDetail = () => {
           {currentCampaign.amountCollected < currentCampaign.target &&
             new Date(currentCampaign.deadline * 1000) > new Date() &&
             currentCampaign.signer == signerAddress && (
+             <div className="addProofOfWork">
+              <h5>Add proof Of Work Section</h5>
               <form onSubmit={proofOfWorkSubmit}>
                 <select className="select" name="dataType" ref={dataTypeRef} defaultValue="image">
                   <option value="image">Image</option>
@@ -456,6 +459,7 @@ const CampaignDetail = () => {
                 ></textarea>
                 <button className="btn" type="submit">Add proof of Work</button>
               </form>
+              </div>
             )}
         </div>
       ) : (

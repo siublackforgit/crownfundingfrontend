@@ -368,6 +368,16 @@ p {
   margin-bottom: 15px;
 }
 
+.proofOfWork-img{
+  width: 50%;
+  height: auto;
+  display: block;
+}
+
+.addProofOfWork{
+  margin: 60px 0px;
+}
+
 /* footer */
 
 .footer {
