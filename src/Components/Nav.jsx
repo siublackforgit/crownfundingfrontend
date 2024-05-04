@@ -17,6 +17,7 @@ const Nav = () => {
 
   useEffect(() => {
     if (state.contract == null) {
+      console.log('reached here')
       const setupSignerAndContract = async () => {
         try {
           const accounts = await provider.send("eth_requestAccounts", []);
@@ -37,9 +38,9 @@ const Nav = () => {
           setContractInstance(contractinstance);
           console.log('contract instance',ContractInstance);
           if(ContractInstance != null ){
-            dispatch({ type: "GET_CONTRACT", payload: ContractInstance });
+            dispatch({ type: "GET_CONTRACT", payload: contractinstance });
+            console.log("State after update:", state);
           }
-          console.log("State after update:", state);
         } catch (error) {
           if (error.code === 4001) {
             console.log("User rejected the connection request.");
@@ -47,7 +48,7 @@ const Nav = () => {
             console.error("An error occurred:", error);
           }
         }
-        console.log('state',state);
+        // console.log('state',state);
       };
   
       if (window.ethereum) {
@@ -91,7 +92,6 @@ const Nav = () => {
             if (contractinstance) {
               setContractInstance(contractinstance);
               dispatch({ type: "GET_CONTRACT", payload: ContractInstance });
-              console.log("state", state);
             }
           }
         };
@@ -124,7 +124,6 @@ const Nav = () => {
         >
           <span className="navbar-toggler-icon"></span>
         </button>
-        {console.log('state',state)}
         {state.status == "Succeed Contract" && (
           <div className="collapse navbar-collapse" id="navbarNav">
             <ul className="navbar-nav">

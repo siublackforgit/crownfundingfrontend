@@ -34,6 +34,7 @@ const CreateCampaign = () => {
   });
 
   useEffect(()=>{
+    console.log('stateeeeeeee',state)
     const getAddress = async () => {
       try {
         const address = await browserSigner.getAddress();
@@ -75,7 +76,7 @@ const CreateCampaign = () => {
   const submitForm = async (e) => {
     e.preventDefault();
     console.log("form", campaignForm);
-    console.log('state contract',state.contract)
+    console.log('state check',state)
     try {    
       const transaction = await state.contract.createCampaign(
         campaignForm.address,
