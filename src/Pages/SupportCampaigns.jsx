@@ -262,7 +262,7 @@ const SupportCampaigns = () => {
                         )}`}</p>
                         {parseFloat(
                           ethers.utils.formatEther(item.amountNotYetSend)
-                        ) > 0 && <div className="errorMessage">Please Enter And Help Release Fund</div>}
+                        ) > new Date(item.deadline * 1000) < new Date() &&<div className="errorMessage">Please Enter And Help Release Fund</div>}
                         <p>{"Deadline : " + formatUnixTime(item.deadline)}</p>
                         <div className="errorMessage">
                           This Campaign has completed

@@ -224,8 +224,6 @@ const CampaignDetail = () => {
 
         const receipt = await sendSupport.wait();
 
-        // console.log("Transaction confirmed:", receipt);
-        // Optionally, handle the confirmation with a user-friendly message
         alert(
           "Thank you for your donation! Your transaction has been confirmed."
         );
@@ -262,9 +260,11 @@ const CampaignDetail = () => {
           signerAddress,
           ngoAddress
         );
+        alert('succeed cancel the fund');
       }
     } catch (error) {
       console.log("error", error);
+      alert('fail to cancel the fund')
     }
   };
 
